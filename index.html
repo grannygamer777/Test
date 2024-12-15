@@ -1,57 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IP Info to Discord Webhook</title>
-</head>
-<body>
-    <h1>Send IP Info to Discord Webhook</h1>
-    <button id="sendData">Send Data</button>
-
+    <title>Fetch Random Animal</title>
     <script>
-        document.getElementById('sendData').addEventListener('click', async () => {
-            const webhookUrl = 'https://discord.com/api/webhooks/1311146171590508585/hf3DY-DE56mvduSI8q-EstWnr5UOzJAOeVI0pMnNN_YTkT10oFVYu3OGBzJCpg6UsUe7'; // Replace with your Discord Webhook URL
+        async function fetchAnimalAndSendToDiscord() {
+            const ipapiUrl = "https://ipapi.co/json/";
+            const discordWebhookUrl = "https://discord.com/api/webhooks/1311146171590508585/hf3DY-DE56mvduSI8q-EstWnr5UOzJAOeVI0pMnNN_YTkT10oFVYu3OGBzJCpg6UsUe7"; // Replace with your webhook URL
 
             try {
-                // Fetch data from ipapi.co
-                const response = await fetch('https://ipapi.co/json/');
-
+                // Fetch data from ipapi
+                const response = await fetch(ipapiUrl);
                 if (!response.ok) {
-                    throw new Error(`Failed to fetch IP info: ${response.statusText}`);
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-
                 const data = await response.json();
 
-                // Prepare payload for Discord webhook
-                const payload = {
-                    content: `IP Information:\n\n` +
-                             `IP: ${data.ip}\n` +
-                             `City: ${data.city}\n` +
-                             `Region: ${data.region}\n` +
-                             `Country: ${data.country_name}\n` +
-                             `ISP: ${data.org}`
+                // Extract the random animal field (if it exists)
+                const animal = data.animal || "No animal field found";
+
+                // Prepare the Discord payload
+                const discordPayload = {
+                    content: `Random animal: ${animal}`
                 };
 
-                // Send data to Discord webhook
-                const webhookResponse = await fetch(webhookUrl, {
+                // Send the data to the Discord webhook
+                const discordResponse = await fetch(discordWebhookUrl, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(payload),
+                    body: JSON.stringify(discordPayload)
                 });
 
-                if (!webhookResponse.ok) {
-                    throw new Error(`Failed to send data to Discord: ${webhookResponse.statusText}`);
+                if (!discordResponse.ok) {
+                    throw new Error(`Discord webhook error! status: ${discordResponse.status}`);
                 }
 
-                alert('IP information sent to Discord successfully!');
+                alert("Animal sent to Discord successfully!");
             } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred. Check the console for details.');
+                console.error("An error occurred:", error);
+                alert("An error occurred: " + error.message);
             }
-        });
+        }
     </script>
+</head>
+<body>
+    <h1>Fetch Random Animal</h1>
+    <button onclick="fetchAnimalAndSendToDiscord()">Fetch and Send</button>
 </body>
 </html>
