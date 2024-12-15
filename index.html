@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Info to Discord Webhook</title>
+</head>
+<body>
+    <h1>Send IP Info to Discord Webhook</h1>
+    <button id="sendData">Send Data</button>
+
+    <script>
+        document.getElementById('sendData').addEventListener('click', async () => {
+            const webhookUrl = 'YOUR_DISCORD_WEBHOOK_URL'; // Replace with your Discord Webhook URL
+
+            try {
+                // Fetch data from ipapi.co
+                const response = await fetch('https://ipapi.co/json/');
+
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch IP info: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                // Prepare payload for Discord webhook
+                const payload = {
+                    content: `IP Information:\n\n` +
+                             `IP: ${data.ip}\n` +
+                             `City: ${data.city}\n` +
+                             `Region: ${data.region}\n` +
+                             `Country: ${data.country_name}\n` +
+                             `ISP: ${data.org}`
+                };
+
+                // Send data to Discord webhook
+                const webhookResponse = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                if (!webhookResponse.ok) {
+                    throw new Error(`Failed to send data to Discord: ${webhookResponse.statusText}`);
+                }
+
+                alert('IP information sent to Discord successfully!');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Check the console for details.');
+            }
+        });
+    </script>
+</body>
+</html>
